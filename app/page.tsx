@@ -45,8 +45,9 @@ export default function Home() {
           <li>PDF report delivered to your email</li>
         </ul>
         <PayButton 
+          paymentLink="https://buy.stripe.com/eVq8wO8ta9eh5yc6ZR8k800"
           priceId="price_fengshui_full" 
-          label="Get Full Reading - $19.99"
+          label="Get Full Reading - $4.99"
         />
       </section>
 

@@ -1,42 +1,23 @@
 'use client';
 
-import { stripePromise } from '../lib/stripe';
-
 interface PayButtonProps {
+  paymentLink?: string;
   priceId?: string;
   label?: string;
-  successUrl?: string;
-  cancelUrl?: string;
 }
 
 export default function PayButton({
-  priceId = 'price_fengshui_basic',
-  label = 'Get Full Reading - $9.99',
-  successUrl = typeof window !== 'undefined' ? `${window.location.origin}/success` : '',
-  cancelUrl = typeof window !== 'undefined' ? `${window.location.origin}/cancel` : ''
+  paymentLink = 'https://buy.stripe.com/eVq8wO8ta9eh5yc6ZR8k800',
+  priceId,
+  label = 'Get Premium - $4.99'
 }: PayButtonProps) {
-  const handleCheckout = async () => {
-    const stripe = await stripePromise;
-    if (!stripe) {
-      console.error('Stripe failed to load');
-      return;
-    }
-
-    const { error } = await stripe.redirectToCheckout({
-      lineItems: [{ price: priceId, quantity: 1 }],
-      mode: 'payment',
-      successUrl,
-      cancelUrl,
-    });
-
-    if (error) {
-      console.error('Stripe error:', error);
-    }
+  const handleClick = () => {
+    window.location.href = paymentLink;
   };
 
   return (
     <button
-      onClick={handleCheckout}
+      onClick={handleClick}
       style={{
         backgroundColor: '#635bff',
         color: 'white',
