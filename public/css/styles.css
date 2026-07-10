@@ -1,0 +1,77 @@
+:root { --primary: #059669; --primary-light: #34d399; --bg-dark: #0a1a14; --bg-card: #10251a; --bg-light: #1a3525; --text-primary: #f0fdf4; --text-secondary: #bbf7d0; --gold: #fbbf24; }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Open Sans', sans-serif; background: var(--bg-dark); color: var(--text-primary); min-height: 100vh; }
+.container { max-width: 800px; margin: 0 auto; padding: 0 1.5rem; }
+
+header { padding: 1.5rem 0; background: rgba(10, 26, 20, 0.95); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
+.logo h1 { font-family: 'Noto Serif', serif; font-size: 1.5rem; color: var(--primary-light); text-align: center; }
+
+.hero { padding: 4rem 0; text-align: center; }
+.hero-title { font-family: 'Noto Serif', serif; font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--text-primary); }
+.hero-subtitle { color: var(--text-secondary); margin-bottom: 3rem; }
+
+.analyzer-card { background: var(--bg-card); border-radius: 1.5rem; padding: 2.5rem; border: 1px solid rgba(5, 150, 105, 0.3); }
+.input-group { margin-bottom: 1.5rem; text-align: left; }
+.input-group label { display: block; margin-bottom: 0.5rem; color: var(--text-secondary); }
+.input-group select, .direction-group select { width: 100%; padding: 0.875rem 1rem; border: 2px solid rgba(5, 150, 105, 0.3); border-radius: 0.75rem; background: var(--bg-dark); color: var(--text-primary); font-size: 1rem; }
+.input-group select:focus, .direction-group select:focus { outline: none; border-color: var(--primary); }
+
+.elements-label { color: var(--text-secondary); margin-bottom: 1rem; display: block; }
+.element-options { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.5rem; }
+.element-checkbox { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; background: var(--bg-dark); border-radius: 1rem; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; }
+.element-checkbox:hover { border-color: var(--primary); }
+.element-checkbox input { display: none; }
+.element-checkbox:has(input:checked) { background: var(--primary); border-color: var(--primary); }
+.element-icon { font-size: 2rem; }
+.element-checkbox span:last-child { font-size: 0.85rem; }
+
+.direction-group { margin-bottom: 1.5rem; text-align: left; }
+.direction-group label { display: block; margin-bottom: 0.5rem; color: var(--text-secondary); }
+
+.btn-primary { width: 100%; padding: 1.125rem; background: linear-gradient(135deg, var(--primary), #047857); border: none; border-radius: 0.75rem; color: white; font-size: 1.125rem; font-weight: 600; cursor: pointer; transition: transform 0.3s; box-shadow: 0 4px 20px rgba(5, 150, 105, 0.4); }
+.btn-primary:hover { transform: translateY(-2px); }
+.btn-secondary { padding: 0.75rem 1.5rem; background: transparent; border: 2px solid var(--primary); border-radius: 0.75rem; color: var(--primary-light); cursor: pointer; transition: all 0.3s; }
+.btn-secondary:hover { background: var(--primary); color: white; }
+
+.results-section { padding: 4rem 0; }
+.result-card { background: var(--bg-card); border-radius: 1.5rem; padding: 2.5rem; border: 1px solid rgba(5, 150, 105, 0.3); }
+.result-card h3 { color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem; text-align: center; }
+
+.energy-meter { margin-bottom: 2rem; }
+.energy-label { color: var(--text-secondary); margin-bottom: 0.5rem; }
+.meter-bar { height: 12px; background: var(--bg-dark); border-radius: 6px; overflow: hidden; }
+.meter-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-light)); border-radius: 6px; transition: width 1s ease-out; }
+.energy-score { font-size: 2rem; font-weight: 700; color: var(--primary-light); text-align: center; margin-top: 0.5rem; }
+
+.element-balance { margin-bottom: 2rem; }
+.element-balance h4 { color: var(--text-secondary); margin-bottom: 1rem; text-align: center; }
+.element-bars { display: flex; gap: 0.5rem; justify-content: center; }
+.element-bar { width: 50px; background: var(--bg-dark); border-radius: 0.5rem; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+.element-bar-fill { width: 100%; background: var(--primary); transition: height 1s ease-out; }
+.element-bar-label { font-size: 0.7rem; padding: 0.25rem; color: var(--text-secondary); }
+
+.recommendations { background: var(--bg-dark); padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem; }
+.recommendations h4 { color: var(--gold); margin-bottom: 1rem; }
+.recommendations ul { list-style: none; }
+.recommendations li { padding: 0.75rem 0; border-bottom: 1px solid rgba(5, 150, 105, 0.1); }
+.recommendations li:last-child { border-bottom: none; }
+
+.lucky-items h4 { color: var(--text-secondary); margin-bottom: 1rem; text-align: center; }
+.crystal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; }
+.crystal-item { background: var(--bg-dark); padding: 1rem; border-radius: 0.75rem; text-align: center; }
+.crystal-item .crystal-icon { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+.crystal-item .crystal-name { font-weight: 600; color: var(--primary-light); }
+.crystal-item .crystal-purpose { font-size: 0.8rem; color: var(--text-secondary); }
+
+.action-buttons { text-align: center; margin-top: 2rem; }
+
+.section-light { padding: 5rem 0; background: var(--bg-card); }
+.section-light h2 { font-family: 'Noto Serif', serif; font-size: 2rem; text-align: center; margin-bottom: 2rem; }
+.elements-explainer { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; }
+.element-card { background: var(--bg-dark); padding: 1.5rem; border-radius: 1rem; text-align: center; border: 1px solid rgba(5, 150, 105, 0.2); }
+.element-card .element-icon { font-size: 2.5rem; display: block; margin-bottom: 0.75rem; }
+.element-card h3 { color: var(--primary-light); margin-bottom: 0.25rem; }
+.element-card p { font-size: 0.9rem; color: var(--text-secondary); }
+
+footer { padding: 2rem 0; text-align: center; border-top: 1px solid rgba(5, 150, 105, 0.2); color: var(--text-secondary); }

@@ -1,11 +1,468 @@
+'use client';
+
+import { useState } from 'react';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://fengshui-api-eosin.vercel.app';
+
+const spaceTypes = ['Home', 'Office', 'Apartment', 'Studio', 'Commercial'];
+const roomTypes = ['Living Room', 'Bedroom', 'Kitchen', 'Bathroom', 'Home Office', 'Dining Room', 'Entrance'];
+const directions = ['North', 'Northeast', 'East', 'Southeast', 'South', 'Southwest', 'West', 'Northwest', 'Unknown'];
+const elements = ['Wood', 'Fire', 'Earth', 'Metal', 'Water'];
+const commonIssues = [
+  'Cluttered spaces',
+  'Poor lighting',
+  'Blocked pathways',
+  'Sharp corners',
+  'Stagnant energy',
+  'Lack of plants',
+  'Too much electronics',
+  'Imbalanced colors'
+];
+
 export default function Home() {
+  const [formData, setFormData] = useState({
+    spaceType: 'Home',
+    roomType: 'Living Room',
+    direction: 'Unknown',
+    birthYear: '',
+    elements: [] as string[],
+    issues: [] as string[],
+    goals: ''
+  });
+  const [analysis, setAnalysis] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleElementToggle = (element: string) => {
+    setFormData(prev => ({
+      ...prev,
+      elements: prev.elements.includes(element)
+        ? prev.elements.filter(e => e !== element)
+        : [...prev.elements, element]
+    }));
+  };
+
+  const handleIssueToggle = (issue: string) => {
+    setFormData(prev => ({
+      ...prev,
+      issues: prev.issues.includes(issue)
+        ? prev.issues.filter(i => i !== issue)
+        : [...prev.issues, issue]
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch(`${API_URL}/api/analysis/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          spaceData: {
+            spaceType: formData.spaceType,
+            roomType: formData.roomType,
+            direction: formData.direction,
+            birthYear: formData.birthYear || undefined,
+            elements: formData.elements,
+            issues: formData.issues
+          },
+          goals: formData.goals,
+          premium: false
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setAnalysis(data.analysis);
+      } else {
+        setError(data.error || 'Failed to generate analysis');
+      }
+    } catch (err) {
+      setError('Unable to connect to the server. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetForm = () => {
+    setAnalysis(null);
+    setError('');
+  };
+
   return (
-    <main style={{ padding: '2rem', fontFamily: 'system-ui' }}>
-      <h1>Feng Shui Analyzer</h1>
-      <p>Room/address energy flow analyzer</p>
-      <p style={{ color: '#666', marginTop: '2rem' }}>
-        Deployed via Project HACK
-      </p>
+    <main className="container">
+      <header>
+        <h1>Feng Shui Analyzer</h1>
+        <p className="subtitle">Harmonize your space with ancient wisdom</p>
+      </header>
+
+      {!analysis ? (
+        <form onSubmit={handleSubmit} className="analysis-form">
+          <div className="form-section">
+            <h3>Space Details</h3>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Space Type</label>
+                <select
+                  value={formData.spaceType}
+                  onChange={e => setFormData(prev => ({ ...prev, spaceType: e.target.value }))}
+                >
+                  {spaceTypes.map(type => (
+                    <option key={type} value={type}>{type}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Room Type</label>
+                <select
+                  value={formData.roomType}
+                  onChange={e => setFormData(prev => ({ ...prev, roomType: e.target.value }))}
+                >
+                  {roomTypes.map(type => (
+                    <option key={type} value={type}>{type}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Facing Direction</label>
+                <select
+                  value={formData.direction}
+                  onChange={e => setFormData(prev => ({ ...prev, direction: e.target.value }))}
+                >
+                  {directions.map(dir => (
+                    <option key={dir} value={dir}>{dir}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Your Birth Year (Optional)</label>
+                <input
+                  type="number"
+                  placeholder="e.g., 1990"
+                  value={formData.birthYear}
+                  onChange={e => setFormData(prev => ({ ...prev, birthYear: e.target.value }))}
+                  min="1900"
+                  max="2024"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="form-section">
+            <h3>Elements Present in Your Space</h3>
+            <div className="chip-group">
+              {elements.map(element => (
+                <button
+                  key={element}
+                  type="button"
+                  className={`chip ${formData.elements.includes(element) ? 'active' : ''}`}
+                  onClick={() => handleElementToggle(element)}
+                >
+                  {element}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="form-section">
+            <h3>Current Issues (Select all that apply)</h3>
+            <div className="chip-group">
+              {commonIssues.map(issue => (
+                <button
+                  key={issue}
+                  type="button"
+                  className={`chip ${formData.issues.includes(issue) ? 'active' : ''}`}
+                  onClick={() => handleIssueToggle(issue)}
+                >
+                  {issue}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="form-section">
+            <h3>Your Goals</h3>
+            <textarea
+              placeholder="What would you like to improve? (e.g., better sleep, more prosperity, improved relationships)"
+              value={formData.goals}
+              onChange={e => setFormData(prev => ({ ...prev, goals: e.target.value }))}
+              rows={3}
+            />
+          </div>
+
+          {error && <div className="error-message">{error}</div>}
+
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? 'Analyzing...' : 'Analyze My Space'}
+          </button>
+        </form>
+      ) : (
+        <div className="analysis-results">
+          <div className="result-header">
+            <h2>Your Feng Shui Analysis</h2>
+            <span className="score">Score: {analysis.overallScore || 'N/A'}/100</span>
+          </div>
+
+          {analysis.basicTips && (
+            <div className="result-section">
+              <h3>Quick Tips for Your {formData.roomType}</h3>
+              <ul className="tips-list">
+                {analysis.basicTips.map((tip: string, i: number) => (
+                  <li key={i}>{tip}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {analysis.energyAssessment && (
+            <div className="result-section">
+              <h3>Energy Assessment</h3>
+              <p>{analysis.energyAssessment}</p>
+            </div>
+          )}
+
+          {analysis.recommendations && analysis.recommendations.length > 0 && (
+            <div className="result-section">
+              <h3>Recommendations</h3>
+              {analysis.recommendations.map((rec: any, i: number) => (
+                <div key={i} className="recommendation-card">
+                  <div className="rec-header">
+                    <span className="rec-area">{rec.area}</span>
+                    <span className={`rec-priority priority-${rec.priority}`}>{rec.priority}</span>
+                  </div>
+                  <p className="rec-issue">{rec.issue}</p>
+                  <p className="rec-solution">{rec.solution}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="premium-cta">
+            <h3>Want a Deeper Analysis?</h3>
+            <p>Get a comprehensive AI-powered Feng Shui reading with personalized recommendations.</p>
+            <button
+              className="btn-premium"
+              onClick={() => { window.location.href = 'https://buy.stripe.com/eVq8wO8ta9eh5yc6ZR8k800'; }}
+            >
+              Get Premium Analysis - $4.99
+            </button>
+          </div>
+
+          <button className="btn-secondary" onClick={resetForm}>
+            Analyze Another Space
+          </button>
+        </div>
+      )}
+
+      <footer>
+        <p>Part of the <a href="https://mdo3d.com">MDO3D Divination</a> suite</p>
+      </footer>
+
+      <style jsx>{`
+        .container {
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 2rem 1rem;
+          font-family: system-ui, -apple-system, sans-serif;
+          color: #f1f5f9;
+          background: #0f0f1a;
+          min-height: 100vh;
+        }
+        header { text-align: center; margin-bottom: 2rem; }
+        h1 {
+          font-size: 2.5rem;
+          background: linear-gradient(135deg, #10b981, #06b6d4);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        .subtitle { color: #94a3b8; }
+        .analysis-form {
+          background: #1a1a2e;
+          border-radius: 1rem;
+          padding: 2rem;
+        }
+        .form-section {
+          margin-bottom: 2rem;
+        }
+        .form-section h3 {
+          margin-bottom: 1rem;
+          color: #10b981;
+        }
+        .form-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+        }
+        @media (max-width: 600px) {
+          .form-row { grid-template-columns: 1fr; }
+        }
+        .form-group {
+          margin-bottom: 1rem;
+        }
+        label {
+          display: block;
+          margin-bottom: 0.5rem;
+          color: #94a3b8;
+          font-size: 0.9rem;
+        }
+        select, input, textarea {
+          width: 100%;
+          padding: 0.75rem;
+          background: #252542;
+          border: 1px solid transparent;
+          border-radius: 0.5rem;
+          color: #f1f5f9;
+          font-size: 1rem;
+        }
+        select:focus, input:focus, textarea:focus {
+          outline: none;
+          border-color: #10b981;
+        }
+        .chip-group {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+        }
+        .chip {
+          padding: 0.5rem 1rem;
+          background: #252542;
+          border: 1px solid #374151;
+          border-radius: 2rem;
+          color: #94a3b8;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .chip:hover { border-color: #10b981; }
+        .chip.active {
+          background: #10b981;
+          color: white;
+          border-color: #10b981;
+        }
+        .btn-primary {
+          width: 100%;
+          padding: 1rem;
+          background: linear-gradient(135deg, #10b981, #06b6d4);
+          border: none;
+          border-radius: 0.5rem;
+          color: white;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+        }
+        .btn-primary:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+        .btn-secondary {
+          width: 100%;
+          padding: 1rem;
+          background: #252542;
+          border: none;
+          border-radius: 0.5rem;
+          color: #f1f5f9;
+          font-size: 1rem;
+          cursor: pointer;
+          margin-top: 1rem;
+        }
+        .error-message {
+          background: #7f1d1d;
+          color: #fecaca;
+          padding: 1rem;
+          border-radius: 0.5rem;
+          margin-bottom: 1rem;
+        }
+        .analysis-results {
+          background: #1a1a2e;
+          border-radius: 1rem;
+          padding: 2rem;
+        }
+        .result-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 2rem;
+        }
+        .score {
+          background: #10b981;
+          padding: 0.5rem 1rem;
+          border-radius: 0.5rem;
+          font-weight: 600;
+        }
+        .result-section {
+          margin-bottom: 2rem;
+          padding-bottom: 2rem;
+          border-bottom: 1px solid #252542;
+        }
+        .result-section h3 { color: #10b981; margin-bottom: 1rem; }
+        .tips-list {
+          list-style: none;
+          padding: 0;
+        }
+        .tips-list li {
+          padding: 0.75rem 0;
+          border-bottom: 1px solid #252542;
+        }
+        .tips-list li:before {
+          content: '✓ ';
+          color: #10b981;
+        }
+        .recommendation-card {
+          background: #252542;
+          padding: 1rem;
+          border-radius: 0.5rem;
+          margin-bottom: 1rem;
+        }
+        .rec-header {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 0.5rem;
+        }
+        .rec-area { font-weight: 600; }
+        .rec-priority {
+          padding: 0.25rem 0.5rem;
+          border-radius: 0.25rem;
+          font-size: 0.8rem;
+        }
+        .priority-high { background: #ef4444; }
+        .priority-medium { background: #f59e0b; }
+        .priority-low { background: #10b981; }
+        .rec-issue { color: #94a3b8; font-size: 0.9rem; }
+        .rec-solution { margin-top: 0.5rem; }
+        .premium-cta {
+          background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+          border: 1px solid #10b981;
+          border-radius: 1rem;
+          padding: 2rem;
+          text-align: center;
+          margin: 2rem 0;
+        }
+        .btn-premium {
+          background: linear-gradient(135deg, #f59e0b, #d97706);
+          border: none;
+          padding: 1rem 2rem;
+          border-radius: 0.5rem;
+          color: white;
+          font-weight: 600;
+          cursor: pointer;
+          margin-top: 1rem;
+        }
+        footer {
+          text-align: center;
+          padding: 2rem;
+          color: #94a3b8;
+        }
+        footer a { color: #10b981; }
+      `}</style>
     </main>
   );
 }

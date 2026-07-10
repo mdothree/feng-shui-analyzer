@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feng Shui Analyzer - Balance Your Space</title>
+    <meta name="description" content="Analyze your living space with Feng Shui principles. Discover how to harmonize your environment for better energy flow.">
+    <link rel="canonical" href="https://fengshui.mdo3d.com">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2316653a'/><text x='16' y='22' font-size='16' text-anchor='middle' fill='%23bbf7d0'>☯</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo"><h1>☯ Feng Shui Analyzer</h1></div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2 class="hero-title">Harmonize Your Space</h2>
+                <p class="hero-subtitle">Balance the energy in your home for health, wealth, and happiness</p>
+                
+                <div class="analyzer-card">
+                    <div class="input-group">
+                        <label for="room-type">Room Type</label>
+                        <select id="room-type">
+                            <option value="">Select a room</option>
+                            <option value="living">Living Room</option>
+                            <option value="bedroom">Bedroom</option>
+                            <option value="kitchen">Kitchen</option>
+                            <option value="office">Home Office</option>
+                            <option value="bathroom">Bathroom</option>
+                            <option value="entrance">Entrance/Foyer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="elements-grid">
+                        <p class="elements-label">Select elements present in your room:</p>
+                        <div class="element-options">
+                            <label class="element-checkbox">
+                                <input type="checkbox" value="wood" id="elem-wood">
+                                <span class="element-icon">🌳</span>
+                                <span>Wood</span>
+                            </label>
+                            <label class="element-checkbox">
+                                <input type="checkbox" value="fire" id="elem-fire">
+                                <span class="element-icon">🔥</span>
+                                <span>Fire</span>
+                            </label>
+                            <label class="element-checkbox">
+                                <input type="checkbox" value="earth" id="elem-earth">
+                                <span class="element-icon">⛰️</span>
+                                <span>Earth</span>
+                            </label>
+                            <label class="element-checkbox">
+                                <input type="checkbox" value="metal" id="elem-metal">
+                                <span class="element-icon">⚪</span>
+                                <span>Metal</span>
+                            </label>
+                            <label class="element-checkbox">
+                                <input type="checkbox" value="water" id="elem-water">
+                                <span class="element-icon">💧</span>
+                                <span>Water</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="direction-group">
+                        <label for="facing-direction">Which direction does this room face?</label>
+                        <select id="facing-direction">
+                            <option value="">Select direction</option>
+                            <option value="north">North</option>
+                            <option value="south">South</option>
+                            <option value="east">East</option>
+                            <option value="west">West</option>
+                            <option value="northeast">Northeast</option>
+                            <option value="northwest">Northwest</option>
+                            <option value="southeast">Southeast</option>
+                            <option value="southwest">Southwest</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn-primary" id="analyze-btn">Analyze My Space</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="results-section" id="results-section" style="display: none;">
+            <div class="container">
+                <div class="result-card">
+                    <h3>Feng Shui Analysis</h3>
+                    <div class="energy-meter">
+                        <div class="energy-label">Overall Energy Flow</div>
+                        <div class="meter-bar">
+                            <div class="meter-fill" id="energy-fill"></div>
+                        </div>
+                        <div class="energy-score" id="energy-score">75%</div>
+                    </div>
+                    
+                    <div class="element-balance">
+                        <h4>Element Balance</h4>
+                        <div class="element-bars" id="element-bars"></div>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h4>✨ Recommendations</h4>
+                        <ul id="recommendations-list"></ul>
+                    </div>
+                    
+                    <div class="lucky-items">
+                        <h4>Crystal Recommendations</h4>
+                        <div class="crystal-grid" id="crystal-grid"></div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn-secondary" id="new-btn">Analyze Another Room</button>
+                </div>
+
+                <div class="premium-cta" style="margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #16653a 0%, #22c55e 100%); border-radius: 12px; text-align: center;">
+                    <h4 style="color: white; margin-bottom: 0.5rem;">🔮 Get Your Full Feng Shui Report</h4>
+                    <p style="color: rgba(255,255,255,0.9); margin-bottom: 1rem; font-size: 0.9rem;">Includes detailed room-by-room analysis, personalized remedies, and crystal placement guide</p>
+                    <a href="https://buy.stripe.com/eVq8wO8ta9eh5yc6ZR8k800" class="btn-primary" style="background: white; color: #16653a; display: inline-block; padding: 0.75rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600;">Get Full Report - $4.99</a>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section-light">
+            <div class="container">
+                <h2>The Five Elements</h2>
+                <div class="elements-explainer">
+                    <div class="element-card" data-element="wood">
+                        <span class="element-icon">🌳</span>
+                        <h3>Wood</h3>
+                        <p>Growth, vitality, flexibility</p>
+                    </div>
+                    <div class="element-card" data-element="fire">
+                        <span class="element-icon">🔥</span>
+                        <h3>Fire</h3>
+                        <p>Passion, energy, transformation</p>
+                    </div>
+                    <div class="element-card" data-element="earth">
+                        <span class="element-icon">⛰️</span>
+                        <h3>Earth</h3>
+                        <p>Stability, nourishment, protection</p>
+                    </div>
+                    <div class="element-card" data-element="metal">
+                        <span class="element-icon">⚪</span>
+                        <h3>Metal</h3>
+                        <p>Clarity, efficiency, precision</p>
+                    </div>
+                    <div class="element-card" data-element="water">
+                        <span class="element-icon">💧</span>
+                        <h3>Water</h3>
+                        <p>Flow, wisdom, abundance</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Feng Shui Analyzer. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script src="js/app.js" type="module"></script>
+</body>
+</html>
