@@ -4,6 +4,37 @@ import { useState } from 'react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://fengshui-api-eosin.vercel.app';
 
+// Entitlements written by /success after Stripe verification — same localStorage
+// contract as shared/ui-components/entitlement.js. Peek before the API call,
+// consume only after a successful premium response so a failed call doesn't
+// burn the credit.
+const ENT_KEY = 'mdo3d_premium';
+function entIndex(list: any[]): number {
+  return list.findIndex((e: any) => !e.consumed &&
+    (!/monthly/.test(e.readingType || '') || Date.now() - e.verifiedAt < 30 * 24 * 60 * 60 * 1000));
+}
+function hasEntitlement(): boolean {
+  try { return entIndex(JSON.parse(localStorage.getItem(ENT_KEY) || '[]')) !== -1; }
+  catch { return false; }
+}
+function activeSessionId(): string | null {
+  try {
+    const list = JSON.parse(localStorage.getItem(ENT_KEY) || '[]');
+    const i = entIndex(list);
+    return i === -1 ? null : (list[i].sessionId || null);
+  } catch { return null; }
+}
+function consumeEntitlement(): void {
+  try {
+    const list = JSON.parse(localStorage.getItem(ENT_KEY) || '[]');
+    const idx = entIndex(list);
+    if (idx !== -1 && !/monthly/.test(list[idx].readingType || '')) {
+      list[idx].consumed = true;
+      localStorage.setItem(ENT_KEY, JSON.stringify(list));
+    }
+  } catch {}
+}
+
 const spaceTypes = ['Home', 'Office', 'Apartment', 'Studio', 'Commercial'];
 const roomTypes = ['Living Room', 'Bedroom', 'Kitchen', 'Bathroom', 'Home Office', 'Dining Room', 'Entrance'];
 const directions = ['North', 'Northeast', 'East', 'Southeast', 'South', 'Southwest', 'West', 'Northwest', 'Unknown'];
@@ -56,6 +87,7 @@ export default function Home() {
     setLoading(true);
     setError('');
 
+    const premium = hasEntitlement();
     try {
       const response = await fetch(`${API_URL}/api/analysis/generate`, {
         method: 'POST',
@@ -70,12 +102,14 @@ export default function Home() {
             issues: formData.issues
           },
           goals: formData.goals,
-          premium: false
+          premium,
+          sessionId: premium ? activeSessionId() : undefined
         })
       });
 
       const data = await response.json();
       if (data.success) {
+        if (premium) consumeEntitlement();
         setAnalysis(data.analysis);
       } else {
         setError(data.error || 'Failed to generate analysis');
@@ -90,6 +124,24 @@ export default function Home() {
   const resetForm = () => {
     setAnalysis(null);
     setError('');
+  };
+
+  // Dynamic Stripe checkout — creates a session so /success gets a session_id to verify.
+  const startCheckout = async () => {
+    const email = window.prompt('Enter your email to receive your premium report:');
+    if (!email) return;
+    try {
+      const res = await fetch(`${API_URL}/api/payment/create-checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ analysisType: 'single-room', email }),
+      });
+      const data = await res.json();
+      if (data.success && data.checkoutUrl) window.location.href = data.checkoutUrl;
+      else alert('Unable to process payment. Please try again.');
+    } catch {
+      alert('Payment error. Please try again.');
+    }
   };
 
   return (
@@ -251,7 +303,7 @@ export default function Home() {
             <p>Get a comprehensive AI-powered Feng Shui reading with personalized recommendations.</p>
             <button
               className="btn-premium"
-              onClick={() => { window.location.href = 'https://buy.stripe.com/eVq8wO8ta9eh5yc6ZR8k800'; }}
+              onClick={startCheckout}
             >
               Get Premium Analysis - $4.99
             </button>
