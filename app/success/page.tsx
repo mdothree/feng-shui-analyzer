@@ -30,7 +30,10 @@ export default function Success() {
       .then(r => r.json())
       .then(data => {
         if (data.success && data.paid) {
-          grantEntitlement(data.metadata?.readingType || 'premium', sessionId);
+          // The fengshui API stores the tier as metadata.analysisType
+          // (single-room | full-home | office | monthly); readingType is the
+          // key other divination APIs use, kept as a fallback.
+          grantEntitlement(data.metadata?.analysisType || data.metadata?.readingType || 'premium', sessionId);
           setState('confirmed');
         } else {
           setState('failed');
