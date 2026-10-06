@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://fengshui-api-eosin.vercel.app';
 
@@ -63,6 +63,13 @@ export default function Home() {
   const [analysis, setAnalysis] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  // The form is swapped for the results; bring the results into view so the
+  // user lands on the score header, not mid-page.
+  useEffect(() => {
+    if (analysis) resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [analysis]);
 
   const handleElementToggle = (element: string) => {
     setFormData(prev => ({
@@ -124,6 +131,7 @@ export default function Home() {
   const resetForm = () => {
     setAnalysis(null);
     setError('');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Dynamic Stripe checkout — creates a session so /success gets a session_id to verify.
@@ -203,7 +211,7 @@ export default function Home() {
                   value={formData.birthYear}
                   onChange={e => setFormData(prev => ({ ...prev, birthYear: e.target.value }))}
                   min="1900"
-                  max="2024"
+                  max={new Date().getFullYear()}
                 />
               </div>
             </div>
@@ -217,6 +225,7 @@ export default function Home() {
                   key={element}
                   type="button"
                   className={`chip ${formData.elements.includes(element) ? 'active' : ''}`}
+                  aria-pressed={formData.elements.includes(element)}
                   onClick={() => handleElementToggle(element)}
                 >
                   {element}
@@ -233,6 +242,7 @@ export default function Home() {
                   key={issue}
                   type="button"
                   className={`chip ${formData.issues.includes(issue) ? 'active' : ''}`}
+                  aria-pressed={formData.issues.includes(issue)}
                   onClick={() => handleIssueToggle(issue)}
                 >
                   {issue}
@@ -256,9 +266,12 @@ export default function Home() {
           <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? 'Analyzing...' : 'Analyze My Space'}
           </button>
+          {loading && (
+            <p className="loading-note" role="status">Reading the energy of your space…</p>
+          )}
         </form>
       ) : (
-        <div className="analysis-results">
+        <div className="analysis-results" ref={resultsRef}>
           <div className="result-header">
             <h2>Your Feng Shui Analysis</h2>
             <span className="score">Score: {analysis.overallScore || 'N/A'}/100</span>
@@ -368,6 +381,7 @@ export default function Home() {
           font-size: 0.9rem;
         }
         select, input, textarea {
+          box-sizing: border-box;
           width: 100%;
           padding: 0.75rem;
           background: #252542;
@@ -375,6 +389,8 @@ export default function Home() {
           border-radius: 0.5rem;
           color: #f1f5f9;
           font-size: 1rem;
+          font-family: inherit;
+          color-scheme: dark;
         }
         select:focus, input:focus, textarea:focus {
           outline: none;
@@ -396,7 +412,7 @@ export default function Home() {
         }
         .chip:hover { border-color: #10b981; }
         .chip.active {
-          background: #10b981;
+          background: #047857;
           color: white;
           border-color: #10b981;
         }
@@ -414,6 +430,11 @@ export default function Home() {
         .btn-primary:disabled {
           opacity: 0.7;
           cursor: not-allowed;
+        }
+        .loading-note {
+          text-align: center;
+          color: #94a3b8;
+          margin-top: 0.75rem;
         }
         .btn-secondary {
           width: 100%;
@@ -442,10 +463,12 @@ export default function Home() {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          flex-wrap: wrap;
+          gap: 0.75rem;
           margin-bottom: 2rem;
         }
         .score {
-          background: #10b981;
+          background: #047857;
           padding: 0.5rem 1rem;
           border-radius: 0.5rem;
           font-weight: 600;
@@ -485,9 +508,9 @@ export default function Home() {
           border-radius: 0.25rem;
           font-size: 0.8rem;
         }
-        .priority-high { background: #ef4444; }
-        .priority-medium { background: #f59e0b; }
-        .priority-low { background: #10b981; }
+        .priority-high { background: #b91c1c; }
+        .priority-medium { background: #b45309; }
+        .priority-low { background: #047857; }
         .rec-issue { color: #94a3b8; font-size: 0.9rem; }
         .rec-solution { margin-top: 0.5rem; }
         .premium-cta {
@@ -503,7 +526,7 @@ export default function Home() {
           border: none;
           padding: 1rem 2rem;
           border-radius: 0.5rem;
-          color: white;
+          color: #1a1a2e;
           font-weight: 600;
           cursor: pointer;
           margin-top: 1rem;

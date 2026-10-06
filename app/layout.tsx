@@ -20,7 +20,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☯️</text></svg>" />
       </head>
-      <body style={{ margin: 0, background: '#0f0f1a' }}>{children}</body>
+      <body style={{ margin: 0, background: '#0f0f1a', color: '#f1f5f9' }}>{children}</body>
     </html>
   )
 }

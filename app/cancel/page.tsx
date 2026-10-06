@@ -8,7 +8,7 @@ export default function Cancel() {
         style={{
           display: 'inline-block',
           marginTop: '2rem',
-          color: '#635bff'
+          color: '#10b981'
         }}
       >
         Try Again

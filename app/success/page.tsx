@@ -59,7 +59,7 @@ export default function Success() {
           <p>If you were charged, your payment is safe — reply to your Stripe receipt email and we&apos;ll make it right.</p>
         </>
       )}
-      <a href="/" style={{ display: 'inline-block', marginTop: '2rem', color: '#635bff' }}>
+      <a href="/" style={{ display: 'inline-block', marginTop: '2rem', color: '#10b981' }}>
         Return Home
       </a>
     </main>
