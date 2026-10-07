@@ -58,7 +58,7 @@ function analyzeFengShui(roomType, selectedElements, direction) {
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize Firebase
-    firebaseConfig.initialize().catch(console.warn);
+    firebaseConfig.initialize(); // optional, off by default; never rejects
   const analyzeBtn = document.getElementById('analyze-btn');
   const resultsSection = document.getElementById('results-section');
   const newBtn = document.getElementById('new-btn');
