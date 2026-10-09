@@ -166,8 +166,9 @@ export default function Home() {
 
             <div className="form-row">
               <div className="form-group">
-                <label>Space Type</label>
+                <label htmlFor="fs-space-type">Space Type</label>
                 <select
+                  id="fs-space-type"
                   value={formData.spaceType}
                   onChange={e => setFormData(prev => ({ ...prev, spaceType: e.target.value }))}
                 >
@@ -178,8 +179,9 @@ export default function Home() {
               </div>
 
               <div className="form-group">
-                <label>Room Type</label>
+                <label htmlFor="fs-room-type">Room Type</label>
                 <select
+                  id="fs-room-type"
                   value={formData.roomType}
                   onChange={e => setFormData(prev => ({ ...prev, roomType: e.target.value }))}
                 >
@@ -192,8 +194,9 @@ export default function Home() {
 
             <div className="form-row">
               <div className="form-group">
-                <label>Facing Direction</label>
+                <label htmlFor="fs-direction">Facing Direction</label>
                 <select
+                  id="fs-direction"
                   value={formData.direction}
                   onChange={e => setFormData(prev => ({ ...prev, direction: e.target.value }))}
                 >
@@ -204,8 +207,9 @@ export default function Home() {
               </div>
 
               <div className="form-group">
-                <label>Your Birth Year (Optional)</label>
+                <label htmlFor="fs-birth-year">Your Birth Year (Optional)</label>
                 <input
+                  id="fs-birth-year"
                   type="number"
                   placeholder="e.g., 1990"
                   value={formData.birthYear}
@@ -252,8 +256,9 @@ export default function Home() {
           </div>
 
           <div className="form-section">
-            <h3>Your Goals</h3>
+            <h3><label htmlFor="fs-goals">Your Goals</label></h3>
             <textarea
+              id="fs-goals"
               placeholder="What would you like to improve? (e.g., better sleep, more prosperity, improved relationships)"
               value={formData.goals}
               onChange={e => setFormData(prev => ({ ...prev, goals: e.target.value }))}
