@@ -335,6 +335,7 @@ export default function Home() {
 
       <footer>
         <p>Part of the <a href="https://mdo3d.com">MDO3D Divination</a> suite</p>
+        <p>For entertainment and reflection purposes.</p>
       </footer>
 
       <style jsx>{`
