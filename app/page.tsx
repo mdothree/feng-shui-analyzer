@@ -1,6 +1,9 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+// Synced from projects/divination/shared/pricing.json by sync-pricing.mjs; the
+// API charges from the same slice (JARVIS #63), so shown price == charged price.
+import pricing from './lib/pricing.json';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://fengshui-api-eosin.vercel.app';
 
@@ -9,6 +12,15 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://fengshui-api-eosin.v
 // consume only after a successful premium response so a failed call doesn't
 // burn the credit.
 const ENT_KEY = 'mdo3d_premium';
+
+// The analysis sold on this page.
+const ANALYSIS_TYPE = 'single-room';
+function priceLabel(type: string): string {
+  const entry = (pricing.types as Record<string, { amount_cents: number }>)[type];
+  if (!entry) return '';
+  const c = entry.amount_cents;
+  return '$' + (c % 100 === 0 ? String(c / 100) : (c / 100).toFixed(2));
+}
 function entIndex(list: any[]): number {
   return list.findIndex((e: any) => !e.consumed &&
     (!/monthly/.test(e.readingType || '') || Date.now() - e.verifiedAt < 30 * 24 * 60 * 60 * 1000));
@@ -63,6 +75,12 @@ export default function Home() {
   const [analysis, setAnalysis] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  // Paid from first use (JARVIS #94): set when there is no verified purchase
+  // (or the API refused it), so the checkout prompt shows instead of a result.
+  const [needsPurchase, setNeedsPurchase] = useState(false);
+  // The API refused the stored purchase this visit (kept in memory only, so a
+  // transient verification error never burns a valid credit).
+  const [entitlementRejected, setEntitlementRejected] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
 
   // The form is swapped for the results; bring the results into view so the
@@ -91,10 +109,16 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
 
-    const premium = hasEntitlement();
+    // No unpaid analysis tier: without a verified purchase, offer checkout.
+    if (!hasEntitlement() || entitlementRejected) {
+      setNeedsPurchase(true);
+      return;
+    }
+    setNeedsPurchase(false);
+    setLoading(true);
+    const premium = true;
     try {
       const response = await fetch(`${API_URL}/api/analysis/generate`, {
         method: 'POST',
@@ -114,6 +138,12 @@ export default function Home() {
         })
       });
 
+      if (response.status === 402 || response.status === 403) {
+        // The purchase on this device was used up or isn't valid here.
+        setEntitlementRejected(true);
+        setNeedsPurchase(true);
+        return;
+      }
       const data = await response.json();
       if (data.success) {
         if (premium) consumeEntitlement();
@@ -142,7 +172,7 @@ export default function Home() {
       const res = await fetch(`${API_URL}/api/payment/create-checkout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ analysisType: 'single-room', email }),
+        body: JSON.stringify({ analysisType: ANALYSIS_TYPE, email }),
       });
       const data = await res.json();
       if (data.success && data.checkoutUrl) window.location.href = data.checkoutUrl;
@@ -275,6 +305,16 @@ export default function Home() {
           {loading && (
             <p className="loading-note" role="status">Reading the energy of your space…</p>
           )}
+
+          {needsPurchase && (
+            <div className="premium-cta" role="status">
+              <h3>Get Your Feng Shui Analysis</h3>
+              <p>A comprehensive AI-powered Feng Shui reading of your space with personalized recommendations.</p>
+              <button type="button" className="btn-premium" onClick={startCheckout}>
+                Get Premium Analysis - {priceLabel(ANALYSIS_TYPE)}
+              </button>
+            </div>
+          )}
         </form>
       ) : (
         <div className="analysis-results" ref={resultsRef}>
@@ -324,7 +364,7 @@ export default function Home() {
               className="btn-premium"
               onClick={startCheckout}
             >
-              Get Premium Analysis - $4.99
+              Get Premium Analysis - {priceLabel(ANALYSIS_TYPE)}
             </button>
           </div>
 
