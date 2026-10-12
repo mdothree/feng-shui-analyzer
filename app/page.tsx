@@ -153,12 +153,13 @@ export default function Home() {
   };
 
   return (
-    <main className="container">
+    <div className="container">
       <header>
         <h1>Feng Shui Analyzer</h1>
         <p className="subtitle">Harmonize your space with ancient wisdom</p>
       </header>
 
+      <main id="main-content">
       {!analysis ? (
         <form onSubmit={handleSubmit} className="analysis-form">
           <div className="form-section">
@@ -332,6 +333,7 @@ export default function Home() {
           </button>
         </div>
       )}
+      </main>
 
       <footer>
         <p>Part of the <a href="https://mdo3d.com">MDO3D Divination</a> suite</p>
@@ -544,6 +546,6 @@ export default function Home() {
         }
         footer a { color: #10b981; }
       `}</style>
-    </main>
+    </div>
   );
 }
