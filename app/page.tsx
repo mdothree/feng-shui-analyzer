@@ -163,7 +163,7 @@ export default function Home() {
       {!analysis ? (
         <form onSubmit={handleSubmit} className="analysis-form">
           <div className="form-section">
-            <h3>Space Details</h3>
+            <h2>Space Details</h2>
 
             <div className="form-row">
               <div className="form-group">
@@ -223,7 +223,7 @@ export default function Home() {
           </div>
 
           <div className="form-section">
-            <h3>Elements Present in Your Space</h3>
+            <h2>Elements Present in Your Space</h2>
             <div className="chip-group">
               {elements.map(element => (
                 <button
@@ -240,7 +240,7 @@ export default function Home() {
           </div>
 
           <div className="form-section">
-            <h3>Current Issues (Select all that apply)</h3>
+            <h2>Current Issues (Select all that apply)</h2>
             <div className="chip-group">
               {commonIssues.map(issue => (
                 <button
@@ -257,7 +257,7 @@ export default function Home() {
           </div>
 
           <div className="form-section">
-            <h3><label htmlFor="fs-goals">Your Goals</label></h3>
+            <h2><label htmlFor="fs-goals">Your Goals</label></h2>
             <textarea
               id="fs-goals"
               placeholder="What would you like to improve? (e.g., better sleep, more prosperity, improved relationships)"
@@ -367,7 +367,9 @@ export default function Home() {
         .form-section {
           margin-bottom: 2rem;
         }
-        .form-section h3 {
+        .form-section h2 {
+          font-size: 1.17em;
+          margin-top: 1em;
           margin-bottom: 1rem;
           color: #10b981;
         }
