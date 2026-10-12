@@ -22,8 +22,8 @@ function priceLabel(type: string): string {
   return '$' + (c % 100 === 0 ? String(c / 100) : (c / 100).toFixed(2));
 }
 function entIndex(list: any[]): number {
-  return list.findIndex((e: any) => !e.consumed &&
-    (!/monthly/.test(e.readingType || '') || Date.now() - e.verifiedAt < 30 * 24 * 60 * 60 * 1000));
+  // Every reading is a one-shot credit (no monthly tier, JARVIS #63b).
+  return list.findIndex((e: any) => !e.consumed);
 }
 function hasEntitlement(): boolean {
   try { return entIndex(JSON.parse(localStorage.getItem(ENT_KEY) || '[]')) !== -1; }
@@ -40,7 +40,7 @@ function consumeEntitlement(): void {
   try {
     const list = JSON.parse(localStorage.getItem(ENT_KEY) || '[]');
     const idx = entIndex(list);
-    if (idx !== -1 && !/monthly/.test(list[idx].readingType || '')) {
+    if (idx !== -1) {
       list[idx].consumed = true;
       localStorage.setItem(ENT_KEY, JSON.stringify(list));
     }
