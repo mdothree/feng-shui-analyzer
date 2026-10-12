@@ -43,7 +43,7 @@ export default function Success() {
   }, []);
 
   return (
-    <main style={{ padding: '2rem', fontFamily: 'system-ui', textAlign: 'center' }}>
+    <main id="main-content" style={{ padding: '2rem', fontFamily: 'system-ui', textAlign: 'center' }}>
       {state === 'verifying' && (
         <>
           <h1>Confirming your payment…</h1>
