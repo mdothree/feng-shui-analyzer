@@ -54,6 +54,8 @@ export default function Success() {
         <>
           <h1 className="status-ok">Payment confirmed</h1>
           <p>Your premium Feng Shui analysis is unlocked. Run your analysis and the premium version will be applied automatically.</p>
+          <p className="got"><strong>What you got:</strong> one AI Feng Shui analysis of your space: an overall score, personalized recommendations and remedies (saved in this browser on this device).</p>
+          <p className="next">Next step: <a href="https://iching.mdo3d.com/" style={{ color: 'var(--accent)', fontWeight: 600 }}>try I Ching &rarr;</a></p>
         </>
       )}
       {state === 'failed' && (
