@@ -1,16 +1,9 @@
 export default function Cancel() {
   return (
-    <main id="main-content" style={{ padding: '2rem', fontFamily: 'system-ui', textAlign: 'center' }}>
-      <h1 style={{ color: '#ef4444' }}>Payment Cancelled</h1>
+    <main id="main-content" className="status-page">
+      <h1 className="status-bad">Payment Cancelled</h1>
       <p>Your payment was cancelled.</p>
-      <a
-        href="/"
-        style={{
-          display: 'inline-block',
-          marginTop: '2rem',
-          color: '#10b981'
-        }}
-      >
+      <a href="/" className="home-link">
         Try Again
       </a>
     </main>

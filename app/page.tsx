@@ -386,8 +386,8 @@ export default function Home() {
           margin: 0 auto;
           padding: 2rem 1rem;
           font-family: system-ui, -apple-system, sans-serif;
-          color: #f1f5f9;
-          background: #0f0f1a;
+          color: var(--text);
+          background: var(--bg);
           min-height: 100vh;
         }
         header { text-align: center; margin-bottom: 2rem; }
@@ -398,9 +398,9 @@ export default function Home() {
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
-        .subtitle { color: #94a3b8; }
+        .subtitle { color: var(--muted); }
         .analysis-form {
-          background: #1a1a2e;
+          background: var(--surface);
           border-radius: 1rem;
           padding: 2rem;
         }
@@ -411,7 +411,7 @@ export default function Home() {
           font-size: 1.17em;
           margin-top: 1em;
           margin-bottom: 1rem;
-          color: #10b981;
+          color: var(--accent);
         }
         .form-row {
           display: grid;
@@ -427,24 +427,24 @@ export default function Home() {
         label {
           display: block;
           margin-bottom: 0.5rem;
-          color: #94a3b8;
+          color: var(--muted);
           font-size: 0.9rem;
         }
         select, input, textarea {
           box-sizing: border-box;
           width: 100%;
           padding: 0.75rem;
-          background: #252542;
-          border: 1px solid transparent;
+          background: var(--field);
+          border: 1px solid var(--field-border);
           border-radius: 0.5rem;
-          color: #f1f5f9;
+          color: var(--text);
           font-size: 1rem;
           font-family: inherit;
-          color-scheme: dark;
+          color-scheme: var(--scheme);
         }
         select:focus, input:focus, textarea:focus {
           outline: none;
-          border-color: #10b981;
+          border-color: var(--accent);
         }
         .chip-group {
           display: flex;
@@ -453,18 +453,19 @@ export default function Home() {
         }
         .chip {
           padding: 0.5rem 1rem;
-          background: #252542;
-          border: 1px solid #374151;
+          background: var(--field);
+          border: 1px solid var(--chip-border);
           border-radius: 2rem;
-          color: #94a3b8;
+          color: var(--muted);
+          font-size: 0.9rem;
           cursor: pointer;
           transition: all 0.2s;
         }
-        .chip:hover { border-color: #10b981; }
+        .chip:hover { border-color: var(--accent); }
         .chip.active {
           background: #047857;
           color: white;
-          border-color: #10b981;
+          border-color: var(--accent);
         }
         .btn-primary {
           width: 100%;
@@ -483,29 +484,29 @@ export default function Home() {
         }
         .loading-note {
           text-align: center;
-          color: #94a3b8;
+          color: var(--muted);
           margin-top: 0.75rem;
         }
         .btn-secondary {
           width: 100%;
           padding: 1rem;
-          background: #252542;
-          border: none;
+          background: var(--field);
+          border: 1px solid var(--field-border);
           border-radius: 0.5rem;
-          color: #f1f5f9;
+          color: var(--text);
           font-size: 1rem;
           cursor: pointer;
           margin-top: 1rem;
         }
         .error-message {
-          background: #7f1d1d;
-          color: #fecaca;
+          background: var(--err-bg);
+          color: var(--err-fg);
           padding: 1rem;
           border-radius: 0.5rem;
           margin-bottom: 1rem;
         }
         .analysis-results {
-          background: #1a1a2e;
+          background: var(--surface);
           border-radius: 1rem;
           padding: 2rem;
         }
@@ -519,6 +520,7 @@ export default function Home() {
         }
         .score {
           background: #047857;
+          color: #fff;
           padding: 0.5rem 1rem;
           border-radius: 0.5rem;
           font-weight: 600;
@@ -526,23 +528,23 @@ export default function Home() {
         .result-section {
           margin-bottom: 2rem;
           padding-bottom: 2rem;
-          border-bottom: 1px solid #252542;
+          border-bottom: 1px solid var(--line);
         }
-        .result-section h3 { color: #10b981; margin-bottom: 1rem; }
+        .result-section h3 { color: var(--accent); margin-bottom: 1rem; }
         .tips-list {
           list-style: none;
           padding: 0;
         }
         .tips-list li {
           padding: 0.75rem 0;
-          border-bottom: 1px solid #252542;
+          border-bottom: 1px solid var(--line);
         }
         .tips-list li:before {
           content: '✓ ';
-          color: #10b981;
+          color: var(--accent);
         }
         .recommendation-card {
-          background: #252542;
+          background: var(--field);
           padding: 1rem;
           border-radius: 0.5rem;
           margin-bottom: 1rem;
@@ -554,6 +556,7 @@ export default function Home() {
         }
         .rec-area { font-weight: 600; }
         .rec-priority {
+          color: #fff;
           padding: 0.25rem 0.5rem;
           border-radius: 0.25rem;
           font-size: 0.8rem;
@@ -561,11 +564,11 @@ export default function Home() {
         .priority-high { background: #b91c1c; }
         .priority-medium { background: #b45309; }
         .priority-low { background: #047857; }
-        .rec-issue { color: #94a3b8; font-size: 0.9rem; }
+        .rec-issue { color: var(--muted); font-size: 0.9rem; }
         .rec-solution { margin-top: 0.5rem; }
         .premium-cta {
           background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
-          border: 1px solid #10b981;
+          border: 1px solid var(--accent);
           border-radius: 1rem;
           padding: 2rem;
           text-align: center;
@@ -577,6 +580,7 @@ export default function Home() {
           padding: 1rem 2rem;
           border-radius: 0.5rem;
           color: #1a1a2e;
+          font-size: 1rem;
           font-weight: 600;
           cursor: pointer;
           margin-top: 1rem;
@@ -584,9 +588,9 @@ export default function Home() {
         footer {
           text-align: center;
           padding: 2rem;
-          color: #94a3b8;
+          color: var(--muted);
         }
-        footer a { color: #10b981; }
+        footer a { color: var(--accent); }
       `}</style>
     </div>
   );
